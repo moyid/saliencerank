@@ -5,7 +5,7 @@ algorithm = "saliencerank"  # Set this to "textrank", "tpr", "singletpr" or "sal
 def main():
     algorithms = {"textrank":0, "tpr":1, "saliencerank":2, "singletpr":3}
     if algorithm in algorithms: 
-        print "running algorithm:", algorithm
+        print ("running algorithm:", algorithm)
         process_datasets (algorithms[algorithm])
 
 if __name__ == "__main__":
