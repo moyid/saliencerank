@@ -10,7 +10,9 @@ from numpy import linalg
 from tagger import tag_phrases 
 import networkx, nltk
 from nltk.tokenize import RegexpTokenizer
+import simplified_pagerank
 
+nltk.download('stopwords')
 """TextRank algorithm : no heuristic selection of candidates on top of POS tagging. 
 	Ref: Mihalcea and Tarau. 2004. Textrank: Bringing order into texts.""" 
 def textrank(text):
@@ -205,7 +207,7 @@ def saliencerank (topics, pt , text, file_ID, alpha):
     tokenizer = RegexpTokenizer(r'\w+')
     words = tokenizer.tokenize(text)
     words_nostopwords = []
-    for i in xrange(len(words)): 
+    for i in range(len(words)): 
         words[i] = words[i].lower()
         if words[i] not in stop_words: 
             words_nostopwords.append(words[i])
@@ -218,7 +220,7 @@ def saliencerank (topics, pt , text, file_ID, alpha):
 
     #add personalization to pagerank 
     topics_nparray = np.ones((len(topics), len(topics[0])))*10e-10
-    for t in xrange(len(topics)):
+    for t in range(len(topics)):
         count=0
         for el in sorted(topics[t]): 
             topics_nparray [t, count] = topics_nparray [t, count]+ topics[t][el]
@@ -240,7 +242,7 @@ def saliencerank (topics, pt , text, file_ID, alpha):
     
     personalization = {}
     count = 0 
-    for n,_ in graph.nodes_iter(data=True): 
+    for n,_ in graph.nodes(data=True): 
         if n in sorted(topics[0]):
             if n in words: 
                 personalization[n] =  (1.0-alpha)*sum(phi[:, count])+ alpha*distinct[count] 
@@ -251,7 +253,7 @@ def saliencerank (topics, pt , text, file_ID, alpha):
         count = count + 1
     
     # score nodes using default pagerank algorithm, sort by score, keep top n_keywords
-    ranks = networkx.pagerank(graph, 0.85, personalization)
+    ranks = simplified_pagerank.pagerank(graph, 0.85, personalization)
     tagged_phrases = tag_phrases (text) # list of lists 
 
     tagged_phrases_scores = {}
@@ -264,6 +266,6 @@ def saliencerank (topics, pt , text, file_ID, alpha):
         tagged_phrases_scores [" ".join(p)]= score  
     if '' in tagged_phrases_scores: #remove empty character as a key 
         tagged_phrases_scores.pop('')
-    sorted_phrases = sorted(tagged_phrases_scores.iteritems(), key=lambda x: x[1], reverse=True) 
+    sorted_phrases = sorted(tagged_phrases_scores.items(), key=lambda x: x[1], reverse=True) 
     return sorted_phrases
 

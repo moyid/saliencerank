@@ -6,10 +6,12 @@ Including code from NLTK, which is licensed under the Apache License Version 2.0
 '''
 
 import nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.download('punkt')
 
 """Finds NP (nounphrase) leaf nodes of a chunk tree."""
 def leaves(tree):
-    for subtree in tree.subtrees(filter = lambda t: t.node=='NP'):
+    for subtree in tree.subtrees(filter = lambda t: t.label()=='NP'):
         yield subtree.leaves()
         
 """Normalises words to lowercase and stems and lemmatizes it."""
@@ -54,7 +56,7 @@ def tag_phrases (text):
             {<NBAR><IN><NBAR>}  # Above, connected with in/of/etc...
     """
     chunker = nltk.RegexpParser(grammar)
-    toks = nltk.regexp_tokenize(text, sentence_re)
+    toks = nltk.word_tokenize(text)
     postoks = nltk.tag.pos_tag(toks)
    
     tree = chunker.parse(postoks)

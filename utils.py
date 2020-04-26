@@ -5,7 +5,7 @@ Various util functions.
 Including code from textrank, which is licensed under the MIT License.
 '''
 from itertools import combinations as combinations
-from Queue import Queue as _Queue
+from queue import Queue as _Queue
 import re
 
 WINDOW_SIZE = 2
@@ -44,14 +44,14 @@ def update_queue(queue, word):
 
 def process_text(graph, tokens, split_text):
     queue = init_queue(split_text)
-    for i in xrange(WINDOW_SIZE, len(split_text)):
+    for i in range(WINDOW_SIZE, len(split_text)):
         word = split_text[i]
         process_word(graph, tokens, queue, word) 
         update_queue(queue, word)
 
 def queue_iterator(queue):
     iterations = queue.qsize()
-    for i in xrange(iterations):
+    for i in range(iterations):
         var = queue.get()
         yield var
         queue.put(var)

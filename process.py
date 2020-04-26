@@ -12,7 +12,7 @@ import numpy as np
 
 """Outputs the keyphrases in sepatare text files."""
 def writeFiles(keyphrases, fileName, fileDir):
-    keyphraseFile = io.open(fileDir + "/" + fileName + ".txt", 'wb')
+    keyphraseFile = open(fileDir + "/" + fileName + ".txt", 'w')
     keyphraseFile.write('; '.join(keyphrases))
     keyphraseFile.close()
 
@@ -44,11 +44,11 @@ def process_hulth (lda_file, docsXtopics_file, output_dir, flag):
     pt = np.array(pt, dtype = 'float64')
     topics = parse_weights_from_file (lda_file)
     
-    for article_ID in xrange (len(text_articles)):
-        articleFile = io.open(directory + "/" + text_articles[article_ID], 'rb')
+    for article_ID in range (len(text_articles)):
+        articleFile = open(directory + "/" + text_articles[article_ID], 'r')
         text = articleFile.read()
-        text=text.strip('\t\n\r')
-        text= text.split('\r\n') 
+        text=text.strip()
+        text= text.splitlines() 
 
         phrases = algorithm_switch (flag, topics, pt, text[1], article_ID)
         phrases_topk = []
@@ -74,8 +74,8 @@ def process_500N (lda_file, docsXtopics_file, output_dir, flag):
     pt = np.array(pt, dtype = 'float64')
     topics = parse_weights_from_file (lda_file)
     
-    for article_ID in xrange (len(text_articles)):
-        articleFile = io.open(directory + "/" + text_articles[article_ID], 'rb')
+    for article_ID in range (len(text_articles)):
+        articleFile = open(directory + "/" + text_articles[article_ID], 'r')
         text = articleFile.read()
         text= text.split('\n') 
         
